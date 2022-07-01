@@ -3,6 +3,7 @@ package com.money.android_utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
+import android.util.Log
 import java.util.*
 
 @SuppressLint("HardwareIds")
@@ -35,3 +36,15 @@ public fun getVersion(context: Context): String {
         ""
     }
 }
+
+fun getScreenWidthInPixel(context: Context): Int {
+    val metrics = context.resources.displayMetrics
+    return metrics.widthPixels
+}
+
+fun getScreenHeightInPixel(context: Context): Int {
+    val metrics = context.resources.displayMetrics
+    return metrics.heightPixels
+}
+
+fun log(vararg msg: Any?) = Log.e(Thread.currentThread().name, msg.joinToString(" "))
