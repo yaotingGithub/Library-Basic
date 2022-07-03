@@ -7,7 +7,7 @@ import android.util.Log
 import java.util.*
 
 @SuppressLint("HardwareIds")
-public fun getUUID(context: Context): String {
+fun getUUID(context: Context): String {
     var uuid = ""
     if (uuid.isBlank()) {
         try {
@@ -27,7 +27,7 @@ public fun getUUID(context: Context): String {
     return uuid
 }
 
-public fun getVersion(context: Context): String {
+fun getVersion(context: Context): String {
     val manager = context.packageManager
     return try {
         val info = manager.getPackageInfo(context.packageName, 0)
