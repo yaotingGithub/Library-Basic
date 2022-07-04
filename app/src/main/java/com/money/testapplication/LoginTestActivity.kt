@@ -3,8 +3,11 @@ package com.money.testapplication
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.money.login.*
 import com.money.testapplication.databinding.ActivityLoginTestBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class LoginTestActivity(
     private val baseGoogleLogin: BaseGoogleLogin = BaseGoogleLoginImpl(),
@@ -19,6 +22,12 @@ class LoginTestActivity(
         setContentView(binding.root)
         baseGoogleLogin.init(this, "")
         baseFacebookLogin.init()
+        lifecycleScope.launch {
+            baseGoogleLogin.loginGoogleFlow.collect {
+            }
+            baseFacebookLogin.loginFacebookFlow.collect {
+            }
+        }
 
         binding.signInWithGoogle.setOnClickListener {
             baseGoogleLogin.loginWithGoogle(this)
@@ -32,13 +41,5 @@ class LoginTestActivity(
         super.onActivityResult(requestCode, resultCode, data)
         baseGoogleLogin.onActivityResult(requestCode, data)
         baseFacebookLogin.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun doOnGoogleLoginFinish(state: LoginState) {
-        super.doOnGoogleLoginFinish(state)
-    }
-
-    override fun doOnFacebookLoginFinish(state: LoginState) {
-        super.doOnFacebookLoginFinish(state)
     }
 }

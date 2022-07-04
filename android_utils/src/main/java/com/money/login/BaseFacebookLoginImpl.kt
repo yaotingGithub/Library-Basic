@@ -6,6 +6,9 @@ import android.os.Bundle
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.mapNotNull
 import org.json.JSONObject
 import java.lang.IllegalStateException
 
@@ -13,6 +16,9 @@ class BaseFacebookLoginImpl: BaseFacebookLogin {
 
     private val callbackManager = CallbackManager.Factory.create()
     private lateinit var loginManager: LoginManager
+
+    private val _loginState = MutableStateFlow<LoginState?>(null)
+    override val loginFacebookFlow: Flow<LoginState> = _loginState.mapNotNull { it }
 
     override fun init() {
         loginManager = LoginManager.getInstance().apply {
@@ -24,12 +30,13 @@ class BaseFacebookLoginImpl: BaseFacebookLogin {
                     val request = GraphRequest.newMeRequest(fbAccessToken) { jsonObject, _ ->
                         jsonObject?.let {
                             val data = handleSignInResult(it, authToken)
-                            doOnFacebookLoginFinish(LoginState.OnSuccess(data))
+                            _loginState.value = LoginState.OnSuccess(data)
                         } ?: kotlin.run {
-                            doOnFacebookLoginFinish(LoginState.OnError(
+                            _loginState.value = LoginState.OnError(
                                 IllegalStateException("FacebookCallback結果為onSuccess但jsonObject沒有資料")
-                            ))
+                            )
                         }
+                        loginManager.logOut()
                     }
 
                     val parameters = Bundle()
@@ -39,11 +46,11 @@ class BaseFacebookLoginImpl: BaseFacebookLogin {
                 }
 
                 override fun onCancel() {
-                    doOnFacebookLoginFinish(LoginState.OnCancel)
+                    _loginState.value = LoginState.OnCancel
                 }
 
                 override fun onError(error: FacebookException) {
-                    doOnFacebookLoginFinish(LoginState.OnError(error))
+                    _loginState.value = LoginState.OnError(error)
                 }
             })
         }

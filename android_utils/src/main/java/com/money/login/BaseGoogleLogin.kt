@@ -2,10 +2,11 @@ package com.money.login
 
 import android.app.Activity
 import android.content.Intent
+import kotlinx.coroutines.flow.Flow
 
 interface BaseGoogleLogin {
 
-    fun doOnGoogleLoginFinish(state: LoginState) {}
+    val loginGoogleFlow: Flow<LoginState>
 
     fun init(activity: Activity, serverClientId: String)
 

@@ -8,10 +8,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.mapNotNull
 
 class BaseGoogleLoginImpl: BaseGoogleLogin {
 
     private var mGoogleSignInClient: GoogleSignInClient? = null
+
+    private val _loginState = MutableStateFlow<LoginState?>(null)
+    override val loginGoogleFlow: Flow<LoginState> = _loginState.mapNotNull { it }
 
     override fun init(activity: Activity, serverClientId: String) {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -30,9 +36,9 @@ class BaseGoogleLoginImpl: BaseGoogleLogin {
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task).fold({
-                doOnGoogleLoginFinish(LoginState.OnSuccess(it))
+                _loginState.value = LoginState.OnSuccess(it)
             }, {
-                doOnGoogleLoginFinish(LoginState.OnError(it))
+                _loginState.value = LoginState.OnError(it)
             })
             // 注意原本做法在登入後的最後都會登出
             mGoogleSignInClient?.signOut()

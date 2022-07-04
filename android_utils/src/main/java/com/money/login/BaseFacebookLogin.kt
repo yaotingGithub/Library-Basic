@@ -2,10 +2,11 @@ package com.money.login
 
 import android.app.Activity
 import android.content.Intent
+import kotlinx.coroutines.flow.Flow
 
 interface BaseFacebookLogin {
 
-    fun doOnFacebookLoginFinish(state: LoginState) {}
+    val loginFacebookFlow: Flow<LoginState>
 
     fun init()
 
