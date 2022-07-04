@@ -19,17 +19,21 @@ class BaseGoogleLoginImpl: BaseGoogleLogin {
         mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
     }
 
-    override fun signIn(activity: Activity) {
+    override fun loginWithGoogle(activity: Activity) {
         val signInIntent = mGoogleSignInClient?.signInIntent
         signInIntent?.let {
             activity.startActivityForResult(it, RC_SIGN_IN)
         }
     }
 
-    override fun onActivityResult(requestCode: Int, data: Intent?, callback: (Result<LoginResult>) -> Unit) {
+    override fun onActivityResult(requestCode: Int, data: Intent?) {
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            callback(handleSignInResult(task))
+            handleSignInResult(task).fold({
+                doOnGoogleLoginFinish(LoginState.OnSuccess(it))
+            }, {
+                doOnGoogleLoginFinish(LoginState.OnError(it))
+            })
             // 注意原本做法在登入後的最後都會登出
             mGoogleSignInClient?.signOut()
         }

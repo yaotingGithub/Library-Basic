@@ -5,9 +5,11 @@ import android.content.Intent
 
 interface BaseGoogleLogin {
 
+    fun doOnGoogleLoginFinish(state: LoginState) {}
+
     fun init(activity: Activity, serverClientId: String)
 
-    fun signIn(activity: Activity)
+    fun loginWithGoogle(activity: Activity)
 
-    fun onActivityResult(requestCode: Int, data: Intent?, callback: (Result<LoginResult>) -> Unit)
+    fun onActivityResult(requestCode: Int, data: Intent?)
 }
