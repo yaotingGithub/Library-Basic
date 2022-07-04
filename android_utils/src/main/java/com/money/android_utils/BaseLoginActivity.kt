@@ -12,13 +12,13 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
 
 
-abstract class LoginActivity: AppCompatActivity() {
+abstract class BaseLoginActivity: AppCompatActivity() {
 
     abstract val serverClientId: String
 
     abstract fun getLayoutView(): View
 
-    abstract fun initView()
+    abstract fun init()
     /**
      * google登入結束後的狀態處理
      */
@@ -30,11 +30,11 @@ abstract class LoginActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutView())
 
+        init()
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail().requestIdToken(serverClientId).build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        initView()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

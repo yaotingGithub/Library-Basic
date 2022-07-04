@@ -1,13 +1,11 @@
 package com.money.testapplication
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.View
-import com.money.android_utils.LoginActivity
+import com.money.android_utils.BaseLoginActivity
 import com.money.android_utils.User
 import com.money.testapplication.databinding.ActivityLoginTestBinding
 
-class LoginTestActivity(override val serverClientId: String) : LoginActivity() {
+class LoginTestActivity(override val serverClientId: String) : BaseLoginActivity() {
 
     private lateinit var binding: ActivityLoginTestBinding
 
@@ -16,7 +14,7 @@ class LoginTestActivity(override val serverClientId: String) : LoginActivity() {
         return binding.root
     }
 
-    override fun initView() {
+    override fun init() {
         binding.signInWithGoogle.setOnClickListener {
             signInWithGoogle()
         }
