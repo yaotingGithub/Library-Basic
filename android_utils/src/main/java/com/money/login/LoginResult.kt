@@ -1,6 +1,6 @@
-package com.money.android_utils
+package com.money.login
 
-data class User(
+data class LoginResult (
     var name: String,
     var email: String,
     var authToken: String,

@@ -1,26 +1,33 @@
 package com.money.testapplication
 
-import android.view.View
-import com.money.android_utils.BaseLoginActivity
-import com.money.android_utils.User
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.money.login.BaseGoogleLoginImpl
+import com.money.login.BaseGoogleLogin
 import com.money.testapplication.databinding.ActivityLoginTestBinding
 
-class LoginTestActivity(override val serverClientId: String) : BaseLoginActivity() {
+class LoginTestActivity(
+    private val baseGoogleLogin: BaseGoogleLogin = BaseGoogleLoginImpl()
+) : AppCompatActivity(), BaseGoogleLogin by baseGoogleLogin {
 
     private lateinit var binding: ActivityLoginTestBinding
 
-    override fun getLayoutView(): View {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         binding = ActivityLoginTestBinding.inflate(layoutInflater)
-        return binding.root
-    }
+        setContentView(binding.root)
+        baseGoogleLogin.init(this, "")
 
-    override fun init() {
         binding.signInWithGoogle.setOnClickListener {
-            signInWithGoogle()
+            baseGoogleLogin.signIn(this)
         }
     }
 
-    override fun handleGoogleSignInResult(result: Result<User>) {
-        TODO("Not yet implemented")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        baseGoogleLogin.onActivityResult(requestCode, data) {
+
+        }
     }
 }
