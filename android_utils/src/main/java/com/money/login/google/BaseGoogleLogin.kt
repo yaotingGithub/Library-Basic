@@ -1,7 +1,8 @@
-package com.money.login
+package com.money.login.google
 
 import android.app.Activity
 import android.content.Intent
+import com.money.login.LoginState
 import kotlinx.coroutines.flow.Flow
 
 interface BaseGoogleLogin {

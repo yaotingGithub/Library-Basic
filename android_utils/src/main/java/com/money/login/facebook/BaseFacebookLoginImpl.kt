@@ -1,4 +1,4 @@
-package com.money.login
+package com.money.login.facebook
 
 import android.app.Activity
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.money.login.LoginState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.mapNotNull
@@ -70,7 +71,7 @@ class BaseFacebookLoginImpl: BaseFacebookLogin {
         val email = jsonObject.get("email") as? String ?: ""
         val profile = Profile.getCurrentProfile()
         val avatar = profile?.getProfilePictureUri(200, 200).toString()
-        return LoginResult(
+        return com.money.login.LoginResult(
             name = profile?.name ?: "",
             email = email,
             authToken = authToken,

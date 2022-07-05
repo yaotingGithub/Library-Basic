@@ -7,8 +7,5 @@ data class LoginResult (
     var authID: String,
     var avatar: String,
     var loginType: String,
-    var moneyToken: String = "",
-    var moneyUserId: String = "",
-    var isVip: Boolean = false,
-    var vipEndTime: Long = 0L
+    var appId: String
 )

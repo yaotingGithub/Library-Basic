@@ -1,4 +1,4 @@
-package com.money.login
+package com.money.login.google
 
 import android.app.Activity
 import android.content.Intent
@@ -8,6 +8,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.money.login.LoginResult
+import com.money.login.LoginState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.mapNotNull
