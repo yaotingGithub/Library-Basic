@@ -17,4 +17,24 @@ interface ApiService {
         @Field("email") email: String,
         @Field("avatar") avatar: String
     ): Response<JsonObject>
+
+    /**
+     * 請求驗證碼
+     */
+    @FormUrlEncoded
+    @POST("/smoney/ask-verify-code")
+    suspend fun askVerifyCode(
+        @Field("agent") agent: String,
+        @Field("os") os: String
+    ): Response<JsonObject>
+
+    /**
+     * 檢查驗證碼
+     */
+    @FormUrlEncoded
+    @POST("/smoney/check-verify-code")
+    suspend fun checkVerifyCode(
+        @Field("agent") agent: String,
+        @Field("verify_code") verify_code: String
+    ): Response<JsonObject>
 }
