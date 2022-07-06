@@ -9,7 +9,7 @@ interface BaseFacebookLogin {
 
     val loginFacebookFlow: Flow<LoginState>
 
-    fun init()
+    fun init(appId: String)
 
     fun loginWithFacebook(activity: Activity)
 

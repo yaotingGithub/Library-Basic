@@ -21,7 +21,7 @@ class BaseFacebookLoginImpl: BaseFacebookLogin {
     private val _loginState = MutableStateFlow<LoginState?>(null)
     override val loginFacebookFlow: Flow<LoginState> = _loginState.mapNotNull { it }
 
-    override fun init() {
+    override fun init(appId: String) {
         loginManager = LoginManager.getInstance().apply {
             registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
                 override fun onSuccess(result: LoginResult) {
@@ -30,7 +30,7 @@ class BaseFacebookLoginImpl: BaseFacebookLogin {
 
                     val request = GraphRequest.newMeRequest(fbAccessToken) { jsonObject, _ ->
                         jsonObject?.let {
-                            val data = handleSignInResult(it, authToken)
+                            val data = handleSignInResult(it, authToken, appId)
                             _loginState.value = LoginState.OnSuccess(data)
                         } ?: kotlin.run {
                             _loginState.value = LoginState.OnError(
@@ -66,7 +66,7 @@ class BaseFacebookLoginImpl: BaseFacebookLogin {
     }
 
     private fun handleSignInResult(
-        jsonObject: JSONObject, authToken: String
+        jsonObject: JSONObject, authToken: String, appId: String
     ): com.money.login.LoginResult {
         val email = jsonObject.get("email") as? String ?: ""
         val profile = Profile.getCurrentProfile()
@@ -77,7 +77,8 @@ class BaseFacebookLoginImpl: BaseFacebookLogin {
             authToken = authToken,
             authID = profile?.id ?: "",
             avatar = avatar,
-            loginType = "facebook"
+            loginType = "facebook",
+            appId = appId
         )
     }
 }

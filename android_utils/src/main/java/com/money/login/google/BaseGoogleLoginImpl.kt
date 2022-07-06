@@ -21,7 +21,10 @@ class BaseGoogleLoginImpl: BaseGoogleLogin {
     private val _loginState = MutableStateFlow<LoginState?>(null)
     override val loginGoogleFlow: Flow<LoginState> = _loginState.mapNotNull { it }
 
+    private lateinit var appId: String
+
     override fun init(activity: Activity, serverClientId: String) {
+        appId = serverClientId
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail().requestIdToken(serverClientId).build()
         mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
@@ -61,7 +64,8 @@ class BaseGoogleLoginImpl: BaseGoogleLogin {
                 authToken = authToken,
                 authID = authId,
                 avatar = avatar,
-                loginType = "google"
+                loginType = "google",
+                appId = appId
             )
         }
     }
