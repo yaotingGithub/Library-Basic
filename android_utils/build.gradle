@@ -9,8 +9,6 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -22,9 +20,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        compose = true
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -34,6 +38,8 @@ android {
 dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
+    // jetpack compose
+    implementation "androidx.compose.ui:ui:$compose_version"
     // google登入用
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
     // facebook登入用
@@ -50,4 +56,6 @@ dependencies {
     def retrofit_version = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    // biometric 生物識別
+    implementation "androidx.biometric:biometric-ktx:1.2.0-alpha04"
 }

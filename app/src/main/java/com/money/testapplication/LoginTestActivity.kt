@@ -24,7 +24,7 @@ class LoginTestActivity(
         binding = ActivityLoginTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
         baseGoogleLogin.init(this, "")
-        baseFacebookLogin.init()
+        baseFacebookLogin.init("")
         lifecycleScope.launch {
             baseGoogleLogin.loginGoogleFlow.collect {
             }
