@@ -4,14 +4,14 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.money.User
-import com.money.api.ApiService
+import com.money.api.BaseApiService
 import com.money.login.LoginResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.NullPointerException
 
 class LoginWithMoneyUseCase(
-    private val moneyApi: ApiService
+    private val moneyApi: BaseApiService
 ) {
     suspend operator fun invoke(loginResult: LoginResult): Result<User> {
         return kotlin.runCatching {

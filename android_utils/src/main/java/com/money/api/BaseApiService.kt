@@ -2,11 +2,9 @@ package com.money.api
 
 import com.google.gson.JsonObject
 import retrofit2.Response
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
-interface ApiService {
+interface BaseApiService {
 
     @FormUrlEncoded
     @POST("a/auth")
@@ -19,7 +17,15 @@ interface ApiService {
     ): Response<JsonObject>
 
     /**
-     * 請求驗證碼
+     * 判斷token是否為此APP最後一次登入使用之token
+     */
+    @GET("/a/user-last")
+    suspend fun isLatestUser(
+        @Query("agent") agent:String
+    ): Response<JsonObject>
+
+    /**
+     * 請求驗證碼(忘記密碼時用)
      */
     @FormUrlEncoded
     @POST("/smoney/ask-verify-code")
@@ -29,7 +35,7 @@ interface ApiService {
     ): Response<JsonObject>
 
     /**
-     * 檢查驗證碼
+     * 檢查驗證碼(忘記密碼時用)
      */
     @FormUrlEncoded
     @POST("/smoney/check-verify-code")

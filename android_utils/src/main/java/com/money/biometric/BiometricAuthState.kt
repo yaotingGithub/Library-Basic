@@ -3,7 +3,7 @@ package com.money.biometric
 sealed class BiometricAuthState {
     object Success: BiometricAuthState()
     /**
-     * 硬體不支持生物辨識功能
+     * 裝置不支持生物辨識功能
      */
     object NoHardware: BiometricAuthState()
     /**

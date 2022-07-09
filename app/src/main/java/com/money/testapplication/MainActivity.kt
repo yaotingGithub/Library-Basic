@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.money.android_utils.log
-import com.money.api.AppClientManager
 import com.money.biometric.BiometricAuthHelper
 import com.money.testapplication.databinding.ActivityMainBinding
 import kotlinx.coroutines.flow.collect

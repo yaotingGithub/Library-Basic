@@ -3,14 +3,14 @@ package com.money.api.useCase
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import com.money.api.ApiService
+import com.money.api.BaseApiService
 import com.money.api.state.VerifyMailState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.NullPointerException
 
 class RequestVerifyCodeUseCase(
-    private val moneyApi: ApiService
+    private val moneyApi: BaseApiService
 ) {
     private val tag = this::class.java.simpleName
 
