@@ -4,16 +4,19 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.money.api.BaseApiService
+import com.money.api.state.ApiState
 import com.money.api.state.CheckLatestUserState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.NullPointerException
+import java.net.UnknownHostException
 
 class CheckLatestUserUseCase(
     private val moneyApi: BaseApiService
 ) {
+    private val tag = this::class.java.simpleName
 
-    suspend operator fun invoke(agent: String): CheckLatestUserState {
+    suspend operator fun invoke(agent: String): ApiState {
         try {
             val response = moneyApi.isLatestUser(agent)
             val gson = Gson()
@@ -42,11 +45,15 @@ class CheckLatestUserUseCase(
                     CheckLatestUserState.TokenNotFound
                 }
                 else -> {
-                    CheckLatestUserState.OnError(IllegalStateException("unknown statusCode: $code"))
+                    ApiState.OnError(IllegalStateException("$tag -> unknown statusCode: $code"))
                 }
             }
         } catch (exception: Exception) {
-            return CheckLatestUserState.OnError(exception)
+            return if (exception is UnknownHostException) {
+                ApiState.OnNetworkDisconnected()
+            } else {
+                ApiState.OnError(IllegalStateException("$tag -> occur exception: $exception"))
+            }
         }
     }
 }

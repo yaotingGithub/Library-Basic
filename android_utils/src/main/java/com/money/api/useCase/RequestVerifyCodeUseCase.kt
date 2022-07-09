@@ -4,17 +4,19 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.money.api.BaseApiService
+import com.money.api.state.ApiState
 import com.money.api.state.VerifyMailState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.NullPointerException
+import java.net.UnknownHostException
 
 class RequestVerifyCodeUseCase(
     private val moneyApi: BaseApiService
 ) {
     private val tag = this::class.java.simpleName
 
-    suspend operator fun invoke(agent: String): VerifyMailState {
+    suspend operator fun invoke(agent: String): ApiState {
         try {
             val response = moneyApi.askVerifyCode(agent, os = "android")
             val gson = Gson()
@@ -39,11 +41,15 @@ class RequestVerifyCodeUseCase(
                     VerifyMailState.OnSendAlready()
                 }
                 else -> {
-                    VerifyMailState.OnError(IllegalStateException("$tag -> 未知狀態碼: $code"))
+                    ApiState.OnError(IllegalStateException("$tag -> 未知狀態碼: $code"))
                 }
             }
         } catch (exception: Exception) {
-            return VerifyMailState.OnError(IllegalStateException("$tag -> occur exception: $exception"))
+            return if (exception is UnknownHostException) {
+                ApiState.OnNetworkDisconnected()
+            } else {
+                ApiState.OnError(IllegalStateException("$tag -> occur exception: $exception"))
+            }
         }
     }
 }

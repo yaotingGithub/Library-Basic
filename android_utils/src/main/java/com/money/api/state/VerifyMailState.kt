@@ -1,7 +1,6 @@
 package com.money.api.state
 
-sealed class VerifyMailState {
+sealed class VerifyMailState: ApiState() {
     class OnReadyToSend(): VerifyMailState()
     class OnSendAlready(): VerifyMailState()
-    data class OnError(val exception: Throwable): VerifyMailState()
 }
